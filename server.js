@@ -1,9 +1,15 @@
+// load the env vars
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
 
 const app = express();
+
+// connect to the MongoDB with mongoose
+require("./config/database");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -14,6 +20,9 @@ app.use(favicon(path.join(__dirname, "build", "favicon.ico")));
 app.use(express.static(path.join(__dirname, "build")));
 
 // Put API routes here, before the "catch all" route
+const apiRoutes = require("./routes/api");
+
+app.use("/api", apiRoutes);
 
 // The following "catch all" route (note the *)is necessary
 // for a SPA's client-side routing to properly work
